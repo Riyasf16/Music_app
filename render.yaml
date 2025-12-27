@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: music-app-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromDatabase:
+          name: mongodb
+          property: connectionString
+
+  - type: static
+    name: music-app-frontend
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://music-app-backend.onrender.com/api
+
+databases:
+  - name: mongodb
+    plan: free
